@@ -1,4 +1,4 @@
-
+import os
 import discord
 from discord.ext import commands
 import logging
@@ -7,13 +7,18 @@ import asyncio
 # import time
 import random
 
-logging.basicConfig(level=logging.INFO) #enables console logging
+#logging.basicConfig(level=logging.INFO) #enables console logging
 
 bot = commands.Bot(command_prefix='+')
 bot.remove_command("help")
 
-
-bot.load_extension('commands.emojify')
+#automatically loads all .py files in the commands folder as extensions
+for subdir, dirs, files in os.walk('commands'):
+    for file in files:
+        if str(file).endswith(".py"):
+            extension_path = (str(subdir + os.sep + file)[:-3]).replace('\\', '.')
+            bot.load_extension(extension_path)
+            print(f'Extension {file[:-3]} loaded!')
 
 
 @bot.event # Sier ifra når boten er online
