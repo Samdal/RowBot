@@ -11,7 +11,6 @@ import random
 
 bot = commands.Bot(command_prefix='+')
 bot.remove_command("help")
-
 #automatically loads all .py files in the commands folder as extensions
 for subdir, dirs, files in os.walk('commands'):
     for file in files:
@@ -25,18 +24,39 @@ for subdir, dirs, files in os.walk('commands'):
 async def on_ready():
     print("Online!")
 
-
 # global check, ignorerer bots
 @bot.check
 async def ignore_bots(ctx):
     return not ctx.message.author.bot
 
-@bot.command() # prints a random line from 'all star'
+
+
+#HANDY FUNCTIONS
+
+#determines if the given user is a dev
+def is_dev(user_id):
+    return any(user_id == dev_id for dev_id in [209973852741042187, 313703847656816642, 226441515914756097])
+
+
+#COMMANDS
+
+#shuts down the bot. should be automatically rebooted through a bat file
+@bot.command()
+async def crash(ctx):
+    if is_dev(ctx.author.id):
+        await ctx.send('Shutting down.')
+        raise SystemExit
+    else:
+        await ctx.send('Only devs can use this command')
+
+#prints a random line from 'all star'
+@bot.command()
 async def test(ctx):
     with open("allstar.txt") as allstar:
         await ctx.send(random.choice(allstar.read().splitlines()))
 
 
+#reloads the given extension
 @bot.command()
 async def reload(ctx, extension_name):
     for subdir, _, files in os.walk('commands'):
@@ -47,7 +67,10 @@ async def reload(ctx, extension_name):
                 print(f'Extension {file[:-3]} reloaded!')
                 return
             else:
-                print('No extension with that name found')
+                print(f'No extension named {extension_name} found')
+
+
+
 
 
 with open("token.txt") as token: # leser tokenfilen og kjører boten
