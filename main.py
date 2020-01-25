@@ -17,7 +17,7 @@ bot = commands.Bot(command_prefix='+')
 for subdir, dirs, files in os.walk('commands'):
     for file in files:
         if str(file).endswith(".py"):
-            extension_path = (str(subdir + os.sep + file)[:-3]).replace('\\', '.')
+            extension_path = (str(subdir + os.sep + file)[:-3]).replace('\\', '.').replace('/', '.')
             try:
                 bot.load_extension(extension_path)
                 print(f'Extension {file[:-3]} loaded!')
