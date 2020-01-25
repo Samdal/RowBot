@@ -65,13 +65,13 @@ async def reload(ctx, extension_name):
                 extension_path = (str(subdir + os.sep + file)[:-3]).replace('\\', '.')
                 
                 bot.reload_extension(extension_path)
-                await ctx.message.add_reaction("✅")
                 
+                await ctx.message.add_reaction("✅")
                 print(f'Extension {file[:-3]} reloaded!')
                 return
-
-            else:
-                print(f'No extension named {extension_name} found')
+                
+        print(f'No extension named {extension_name} found')
+        return
 
 
 
