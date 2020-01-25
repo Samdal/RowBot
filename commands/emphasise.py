@@ -8,8 +8,8 @@ async def emphasise(ctx, content):
     for character in content:
         output += character + '   '
     
-    await ctx.send(f"***{output[:-3]}***")
     await ctx.message.delete()
+    await ctx.send(f"***{output[:-3]}***")
 
 def setup(bot):
     bot.add_command(emphasise)
