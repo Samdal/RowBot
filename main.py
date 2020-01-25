@@ -46,6 +46,8 @@ async def reload(ctx, extension_name):
                 bot.reload_extension(extension_path)
                 print(f'Extension {file[:-3]} reloaded!')
                 return
+            else:
+                print('No extension with that name found')
 
 
 with open("token.txt") as token: # leser tokenfilen og kjører boten
