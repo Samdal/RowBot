@@ -5,7 +5,7 @@ from os.path import isfile, join
 from random import choice
 
 
-@commands.command()
+@commands.command(help = "Sends a sexy picture ( ͡° ͜ʖ ͡°) of (hopefully) Otto")
 async def gilf(ctx):
     files = [f for f in listdir("commands/gilf/images") if isfile(join("commands/gilf/images", f))] 
     # ^lists all files in the gilf folder.
