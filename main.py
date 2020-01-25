@@ -88,6 +88,7 @@ async def reload(ctx, extension_name):
                 return
 
         print(f'No extension named {extension_name} found')
+        await ctx.message.add_reaction("❌")
         return
 
 
