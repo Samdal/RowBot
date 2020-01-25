@@ -9,6 +9,8 @@ import random
 
 # logging.basicConfig(level=logging.INFO) #enables console logging
 
+
+
 bot = commands.Bot(command_prefix='+')
 bot.remove_command("help")
 # automatically loads all .py files in the commands folder as extensions
@@ -16,18 +18,22 @@ for subdir, dirs, files in os.walk('commands'):
     for file in files:
         if str(file).endswith(".py"):
             extension_path = (str(subdir + os.sep + file)[:-3]).replace('\\', '.')
-            bot.load_extension(extension_path)
-            print(f'Extension {file[:-3]} loaded!')
+            try:
+                bot.load_extension(extension_path)
+                print(f'Extension {file[:-3]} loaded!')
+            except commands.ExtensionNotFound:
+                print(f'Extension {file[:-3]} failed to load')
+
+
 
 
 @bot.event # terminal message when bot is online
 async def on_ready():
     print("Online!")
-
     with open("presence.txt", "r", encoding="utf-8") as obj: # opens presence.txt
         presence = obj.read()
-    
     await bot.change_presence(activity=discord.Game(presence)) # sets presence on discord
+
 
 # global check, ignores bots
 @bot.check
@@ -61,7 +67,6 @@ async def presence(ctx, *, message): # changes the bot's presence
     if ctx.message.author.id in [313703847656816642, 209973852741042187, 226441515914756097]:
         with open("presence.txt", "w", encoding="utf-8") as presence: # opens presence text file
             presence.write(message) # replaces old text with new
-
         await bot.change_presence(activity=discord.Game(message)) # changes presence on discord
 
 
@@ -78,18 +83,16 @@ async def test(ctx):
 async def reload(ctx, extension_name):
     for subdir, _, files in os.walk('commands'):
         for file in files:
-            if str(file)[:-3] == extension_name:
+            print(file) #DEBUGGING
+            if str(file)[:-3] == extension_name and str(file).endswith('.py'):
                 extension_path = (str(subdir + os.sep + file)[:-3]).replace('\\', '.')
-                
                 bot.reload_extension(extension_path)
-                
                 await ctx.message.add_reaction("✅")
                 print(f'Extension {file[:-3]} reloaded!')
                 return
-
-        print(f'No extension named {extension_name} found')
-        await ctx.message.add_reaction("❌")
-        return
+    print(f'No extension named {extension_name} found')
+    await ctx.message.add_reaction("❌")
+    return
 
 
 
