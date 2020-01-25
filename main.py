@@ -83,7 +83,7 @@ async def test(ctx):
 async def reload(ctx, extension_name):
     for subdir, _, files in os.walk('commands'):
         for file in files:
-            print(file) #DEBUGGING
+            #print(file) #DEBUGGING
             if str(file)[:-3] == extension_name and str(file).endswith('.py'):
                 extension_path = (str(subdir + os.sep + file)[:-3]).replace('\\', '.')
                 bot.reload_extension(extension_path)
