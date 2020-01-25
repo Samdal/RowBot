@@ -84,7 +84,7 @@ async def reload(ctx, extension_name):
         for file in files:
             #print(file) #DEBUGGING
             if str(file)[:-3] == extension_name and str(file).endswith('.py'):
-                extension_path = (str(subdir + os.sep + file)[:-3]).replace('\\', '.')
+                extension_path = (str(subdir + os.sep + file)[:-3]).replace('\\', '.').replace('/', '.') #works both with windows and linux paths
                 bot.reload_extension(extension_path)
                 await ctx.message.add_reaction("✅")
                 print(f'Extension {file[:-3]} reloaded!')
