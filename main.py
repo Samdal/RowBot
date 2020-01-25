@@ -36,5 +36,17 @@ async def test(ctx):
     with open("allstar.txt") as allstar:
         await ctx.send(random.choice(allstar.read().splitlines()))
 
+
+@bot.command()
+async def reload(ctx, extension_name):
+    for subdir, _, files in os.walk('commands'):
+        for file in files:
+            if str(file)[:-3] == extension_name:
+                extension_path = (str(subdir + os.sep + file)[:-3]).replace('\\', '.')
+                bot.reload_extension(extension_path)
+                print(f'Extension {file[:-3]} reloaded!')
+                return
+
+
 with open("token.txt") as token: # leser tokenfilen og kjører boten
     bot.run(token.read())
