@@ -12,7 +12,7 @@ import random
 
 
 bot = commands.Bot(command_prefix='+')
-bot.remove_command("help")
+# bot.remove_command("help")
 # automatically loads all .py files in the commands folder as extensions
 for subdir, dirs, files in os.walk('commands'):
     for file in files:
@@ -52,7 +52,7 @@ def is_dev(user_id):
 #COMMANDS
 
 # shuts down the bot. should be automatically rebooted through a bat file
-@bot.command()
+@bot.command(help = "Crashes the bot. Admins only.")
 async def crash(ctx):
     if is_dev(ctx.author.id):
         await ctx.send('Shutting down.')
@@ -61,9 +61,8 @@ async def crash(ctx):
         await ctx.send('Only devs can use this command')
 
 
-@bot.command()
-async def presence(ctx, *, message): # changes the bot's presence
-
+@bot.command(aliases = ["p"], help = "Changes the bot's presence.")
+async def presence(ctx, *, message):
     if ctx.message.author.id in [313703847656816642, 209973852741042187, 226441515914756097]:
         with open("presence.txt", "w", encoding="utf-8") as presence: # opens presence text file
             presence.write(message) # replaces old text with new
@@ -72,14 +71,14 @@ async def presence(ctx, *, message): # changes the bot's presence
 
 
 # prints a random line from 'all star'
-@bot.command()
+@bot.command(aliases = ["t"], help = "Prints a random line from 'all star'")
 async def test(ctx):
     with open("allstar.txt") as allstar:
         await ctx.send(random.choice(allstar.read().splitlines()))
 
 
 # reloads the given extension
-@bot.command()
+@bot.command(aliases = ["r"], help = "Reloads the specified command.")
 async def reload(ctx, extension_name):
     for subdir, _, files in os.walk('commands'):
         for file in files:
@@ -96,7 +95,5 @@ async def reload(ctx, extension_name):
 
 
 
-
-
-with open("token.txt") as token: # leser tokenfilen og kjører boten
+with open("token.txt") as token: # reads the token file and runs the bot
     bot.run(token.read())
