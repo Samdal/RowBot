@@ -66,8 +66,8 @@ async def reload(ctx, extension_name):
                 bot.reload_extension(extension_path)
                 print(f'Extension {file[:-3]} reloaded!')
                 return
-            else:
-                print(f'No extension named {extension_name} found')
+        print(f'No extension named {extension_name} found')
+        return
 
 
 
