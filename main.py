@@ -24,6 +24,11 @@ for subdir, dirs, files in os.walk('commands'):
 async def on_ready():
     print("Online!")
 
+    with open("presence.txt", "r", encoding="utf-8") as obj: # opens presence.txt
+        presence = obj.read()
+    
+    await bot.change_presence(activity=discord.Game(presence)) # sets presence on discord
+
 # global check, ignores bots
 @bot.check
 async def ignore_bots(ctx):
@@ -49,6 +54,18 @@ async def crash(ctx):
     else:
         await ctx.send('Only devs can use this command')
 
+
+@bot.command()
+async def presence(ctx, *, message): # changes the bot's presence
+
+    if ctx.message.author.id in [313703847656816642, 209973852741042187, 226441515914756097]:
+        with open("presence.txt", "w", encoding="utf-8") as presence: # opens presence text file
+            presence.write(message) # replaces old text with new
+
+        await bot.change_presence(activity=discord.Game(message)) # changes presence on discord
+
+
+
 # prints a random line from 'all star'
 @bot.command()
 async def test(ctx):
@@ -69,7 +86,7 @@ async def reload(ctx, extension_name):
                 await ctx.message.add_reaction("✅")
                 print(f'Extension {file[:-3]} reloaded!')
                 return
-                
+
         print(f'No extension named {extension_name} found')
         return
 
