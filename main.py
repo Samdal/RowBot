@@ -9,9 +9,11 @@ import random
 
 # logging.basicConfig(level=logging.INFO) #enables console logging
 
+paginator = commands.Paginator(prefix='```', suffix='```')
+helpCommand = commands.DefaultHelpCommand(no_category = "Commands", paginator = paginator)
 
 
-bot = commands.Bot(command_prefix='+')
+bot = commands.Bot(command_prefix='+', help_command = helpCommand)
 # bot.remove_command("help")
 # automatically loads all .py files in the commands folder as extensions
 for subdir, dirs, files in os.walk('commands'):
