@@ -15,17 +15,26 @@ class quote(commands.Cog):
         if target_message == '': #if no message ID is given
             #gets the last message sent in the channel
             counter = 0
-            async for message in ctx.channel.history(limit=2): #.history also gets the message used to trigger the command
+            for message in await ctx.channel.history(limit=2).flatten(): #.history also gets the message used to trigger the command
                 if counter > 0:
-                    #opens the json file, parses and stores the contents in a var, modifies it, and dumps it back
-                    with open(quotes_file_path, 'r+') as quotes_file:
-                        quotes = json.loads(quotes_file.read())
-                        quotes['quotes'].append({ctx.author.id:message.content})
-                    with open(quotes_file_path, 'w+') as quotes_file:
-                        json.dump(quotes, quotes_file)                
+                    quote = message
                 counter += 1
+        else:
+            try:
+                quote = await ctx.channel.fetch_message(int(target_message))
+            except ValueError:
+                await ctx.send("Not a valid message ID")
 
-                
+        print({quote.author.id:quote.content})
+
+        #opens the json file, parses and stores the contents in a var, modifies it, and dumps it back
+        with open(quotes_file_path, 'r+') as quotes_file:
+            quotes = json.loads(quotes_file.read())
+            quotes['quotes'].append({str(quote.author.id):quote.content})
+        with open(quotes_file_path, 'w+') as quotes_file:
+            json.dump(quotes, quotes_file)
+
+        await ctx.send("Quote saved!")
 
 
 
