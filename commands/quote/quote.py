@@ -25,8 +25,6 @@ class quote(commands.Cog):
             except ValueError:
                 await ctx.send("Not a valid message ID")
 
-        print({quote.author.id:quote.content})
-
         #opens the json file, parses and stores the contents in a var, modifies it, and dumps it back
         with open(quotes_file_path, 'r+') as quotes_file:
             quotes = json.loads(quotes_file.read())
@@ -47,7 +45,7 @@ class quote(commands.Cog):
             quotes = json.loads(quotes_file.read())
             
             if user == '': #if no user is given
-                output_quote = random.choice(quotes['quotes']) #might need a rework
+                output_quote = random.choice(quotes['quotes'])
             else: #if a user is given
                 user_quotes = []
                 for quote in quotes['quotes']:
@@ -59,14 +57,16 @@ class quote(commands.Cog):
                     quote_author = str(list(quote.keys())[0])
                     if quote_author == user[3:-1]:
                         user_quotes.append(quote)
-                print(f'USER QUOTES: \n{user_quotes}')
                 output_quote = random.choice(user_quotes)
 
 
-        output_quote_author = list(output_quote.keys())[0]
+        output_quote_author_id = list(output_quote.keys())[0] #note that this is a str
         output_quote_text = list(output_quote.values())[0]
-        await ctx.send(f'*"{output_quote_text}"\n     -<@{output_quote_author}>*') #this is messed up
 
+        #so it doesn't ping the author every time the quote is displayed
+        output_quote_author = self.bot.get_user(int(output_quote_author_id))
+
+        await ctx.send(f'*"{output_quote_text}"\n     -{output_quote_author.name}*')
             
 
 
