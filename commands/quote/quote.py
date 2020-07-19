@@ -7,24 +7,25 @@ class quote(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(description="Saves the last message sent in the channel, or another message from its ID")
+    @commands.command(description="Saves the last message sent in the channel, or another message from its ID", aliases=["q"])
     async def quote(self, ctx, target_message=''): #add support for pinning from message IDs
         
         quotes_file_path = ('commands\\quote\\quotes.json' if os.name == 'nt' else 'commands/quote/quotes.json') #changes the path format based on the OS
         
-        if target_message == '': #if no message ID is given
-            #gets the last message sent in the channel
-            counter = 0
-            for message in await ctx.channel.history(limit=2).flatten(): #.history also gets the message used to trigger the command
-                if counter > 0:
-                    quote = message
-                counter += 1
-        else:
-            try:
+        try:
+            if target_message == '': #if no message ID is given
+                #gets the last message sent in the channel
+                counter = 0
+                for message in await ctx.channel.history(limit=2).flatten(): #.history also gets the message used to trigger the command
+                    if counter > 0:
+                        quote = message
+                    counter += 1
+            else:
                 quote = await ctx.channel.fetch_message(int(target_message))
-            except ValueError:
-                await ctx.send("Not a valid message ID")
-
+        except:
+            await ctx.send("Not a valid message ID")
+            print("\n!!!Could not find message ID, ignore below traceback!!!\n\n")
+                    
         #opens the json file, parses and stores the contents in a var, modifies it, and dumps it back
         with open(quotes_file_path, 'r+') as quotes_file:
             quotes = json.loads(quotes_file.read())
@@ -36,7 +37,7 @@ class quote(commands.Cog):
 
 
 
-    @commands.command(description="Sends a random saved message. Include a user ping to send a random saved message from that person")
+    @commands.command(description="Sends a random saved message. Include a user ping to send a random saved message from that person", aliases=["rq"])
     async def randomquote(self, ctx, *, user=''):
         
         quotes_file_path = ('commands\\quote\\quotes.json' if os.name == 'nt' else 'commands/quote/quotes.json')
