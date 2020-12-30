@@ -16,7 +16,7 @@ If you don't have a bot allready, go to the [Discord developer portal](http://di
 3. `pip install $(cat dependencies.txt)`
 4. `echo -n "YOUR_TOKEN_HERE" > token.txt`
 5. `python3 main.py`
-> Step 3 and 4 require an UNIX based system, if you are installing it on Windows, do step 2 and 4 of the GUI way
+> Step 3 and 4 require an UNIX based system, if you are installing it on Windows, do step 2 and 3 of the GUI way
 
 ### GUI way
 1. Download the zip file from the "⤓Code" in the top right corner of github, extract the zip file on your pc and enter the directeroy of the folder
